@@ -1,0 +1,39 @@
+import java.util.*;
+
+class Calculator<T extends Number> {
+    private List<String> history = new ArrayList<>();
+
+    private void saveHistory(T a, T b, String op, double result) {
+        history.add(a + " " + op + " " + b + " = " + result);
+    }
+
+    public double calculate(T a, T b, char op) {
+        double x = a.doubleValue(), y = b.doubleValue(), result = 0;
+        switch (op) {
+            case '+': result = x + y; break;
+            case '-': result = x - y; break;
+            case '*': result = x * y; break;
+            case '/': result = (y == 0) ? Double.NaN : x / y; break;
+            default: System.out.println("Invalid operator"); return Double.NaN;
+        }
+        saveHistory(a, b, String.valueOf(op), result);
+        return result;
+    }
+
+    public void showHistory() { history.forEach(System.out::println); }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Calculator<Double> calc = new Calculator<>();
+        while (true) {
+            System.out.print("Enter first number, operator, second number: ");
+            double a = sc.nextDouble(), b = sc.nextDouble(); char op = sc.next().charAt(0);
+            System.out.println("Result: " + calc.calculate(a, b, op));
+            System.out.print("See history? (yes/no): ");
+            if (sc.next().equalsIgnoreCase("yes")) calc.showHistory();
+            System.out.print("Continue? (yes/no): ");
+            if (!sc.next().equalsIgnoreCase("yes")) break;
+        }
+        sc.close();
+    }
+}
